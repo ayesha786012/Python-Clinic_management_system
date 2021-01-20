@@ -25,7 +25,7 @@
    let mytable =document.getElementById('datalist');
    let tr=mytable.getElementsByTagName('tr');
    for(var i=0;i<tr.length;i++){
-   let td=tr[i].getElementsByTagName('td')[1];
+   let td=tr[i].getElementsByTagName('td')[i];
    if(td){
    let textvalue=td.textContent||td.innerHTML;
    if(textvalue.toUpperCase().indexOf(filter) > -1){
@@ -60,38 +60,47 @@ $(document).ready(function(){
     $(".add-new").click(function(){
         $(this).attr("disabled", "disabled");
         var index = $("table body tr:last-child").index();
-        var row = '<tr>' +
-            '<td><input type="text" class="form-control" name="id" id="idPatients"></td>' +
-            '<td><input type="text" class="form-control" name="patients_first_name" id="patients_first_name"></td>' +
-            '<td><input type="text" class="form-control" name="patients_last_name" id="patients_last_name"></td>' +
-             '<td><input type="text" class="form-control" name="Patients_father_name" id="Patients_father_name"></td>' +
-            '<td><input type="text" class="form-control" name="Patient_address" id="Patient_address"></td>' +
-            '<td><input type="text" class="form-control" name="Patients_email_address" id="Patients_email_address"></td>' +
-             '<td><input type="text" class="form-control" name="patients_phone_number" id="patients_phone_number"></td>' +
 
-        '<td>' + actions + '</td>' +
-        '</tr>';
         $("table").append(row);
-        $("table body tr").eq(index + 1).find(".add, .edit,.delete").toggle();
+        $("table body tr").eq(index + 1).find(".edit,.delete").toggle();
         $('[data-toggle="tooltip"]').tooltip();
 
     });
 
 // update rec row on edit button click
     $(document).on("click", ".update", function(){
+    var empty = false;
+        var input = $(this).parents("tr").find('input[type="text"]');
+        input.each(function(){
+            if(!$(this).val()){
+                $(this).addClass("error");
+                empty = true;
+            } else{
+                $(this).removeClass("error");
+            }
+             });
         var id = $(this).attr("id");
+
         var string = id;
-        var patients_first_name = $("#patients_first_name").val();
-        var patients_last_name = $("#patients_last_name").val();
+        var patients_f_name = $("#patients_f_name").val();
+        var patients_l_name = $("#patients_last_name").val();
         var Patients_father_name = $("#Patients_father_name").val();
         var Patient_address = $("#Patient_address").val();
         var Patients_email_address = $("#Patients_email_address").val();
         var patients_phone_number = $("#patients_phone_number").val();
-        $.post("/ajax_update", { string: string,patients_first_name: patients_first_name, patients_last_name: patients_last_name, Patients_father_name: Patients_father_name,Patient_address: Patient_address, Patients_email_address: Patients_email_address, patients_phone_number: patients_phone_number}, function(data) {
+        $.post("/ajax_update", { string:string,patients_f_name:patients_f_name, patients_l_name: patients_l_name, Patients_father_name: Patients_father_name,Patient_address: Patient_address, Patients_email_address: Patients_email_address, patients_phone_number: patients_phone_number}, function(data) {
             $("#displaymessage").html(data);
             $("#displaymessage").show();
-        });
 
+        });
+ $(this).parents("tr").find(".error").first().focus();
+        if(!empty){
+            input.each(function(){
+                $(this).parent("td").html($(this).val());
+            });
+            $(this).parents("tr").find(".add, .edit").toggle();
+            $(".add-new").removeAttr("disabled");
+        }
 
     });
 
@@ -99,28 +108,33 @@ $(document).ready(function(){
     $(document).on("click", ".edit", function(){
         $(this).parents("tr").find("td:not(:last-child)").each(function(i){
             if (i=='0'){
-                var idname = 'patients_first_name';
-            }else if (i=='1'){
-                var idname = 'patients_last_name';
+                var idname = 'idPatients';
+            }
+           else if (i=='1'){
+                var idname = 'patients_f_name';
             }else if (i=='2'){
+                var idname = 'patients_last_name';
+            }else if (i=='3'){
                 var idname = 'Patients_father_name';
             }
-            else if (i=='3'){
+            else if (i=='4'){
                 var idname = 'Patient_address';
             }
-            else if (i=='4'){
+            else if (i=='5'){
                 var idname = 'Patients_email_address';
             }
-            else if (i=='5'){
+            else if (i=='6'){
                 var idname = 'patients_phone_number';
             }
 
             else{}
-            $(this).html('<input type="text" name="updaterec" id="' + idname + '" class="form-control" value="' + $(this).text() + '">');
+            $(this).html('<input type="text" name="updaterec" id="' + idname + '" class="form-control" value="' + $.trim($(this).text()) + '">');
+
+
         });
-        $(this).parents("tr").find(".add, .edit").toggle();
-        $(".add-new").attr("disabled", "disabled");
-        $(this).parents("tr").addClass("update");
+        $(this).parents("tr").find(".edit").toggle();
+        //$(".add-new").attr("disabled", "disabled");
+        $(this).parents("tr").find(".update");
     });
 });
 
@@ -347,9 +361,7 @@ tyles for span and cancel button on extra small screens */
  table.table .form-control.error {
   border-color: #f50000;
  }
- table.table td .add {
-  display: none;
- }
+
 </style>
 <body >
 <div>
@@ -441,7 +453,7 @@ tyles for span and cancel button on extra small screens */
 <div id="results"></div>
 </div>
 
-                        <button type="button" class="btn btn-info add-new"><i class="fa fa-plus"></i> Add New</button>
+
 <div class='btn btn-info' id="displaymessage" style="display:none;width:100%;margin-top:10px;"></div>
     <table border="1" id = "datalist"  class="table table-bordered">
 
@@ -483,7 +495,7 @@ tyles for span and cancel button on extra small screens */
             {{user.patients_phone_number}}
         </td>
         <td>
-<a class="add" title="Add" data-toggle="tooltip" id="{{user.idPatients}}"><i class="fa fa-user-plus"></i></a>
+<a class="update" title="Update" data-toggle="tooltip" id="{{user.idPatients}}"><i class="fa fa-user-plus"></i></a>
                             <a class="edit" title="Edit" data-toggle="tooltip" id="{user.idPatients}}"><i class="fa fa-pencil"></i></a>
                              <a class="delete" title="Delete" data-toggle="tooltip" id="{{user.idPatients}}"><i class="fa fa-trash-o"></i></a>
                         </td>
