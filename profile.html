@@ -19,7 +19,7 @@
 
 body{
 font-family: Arial, Helvetica, sans-serif;
-background-image:url(/static/images.jpg);
+background-image:url(/static/images/three.jpg);
 
 background-repeat: no-repeat;
     width: 100%;
@@ -30,7 +30,7 @@ background-repeat: no-repeat;
 
 
 .container{
-background-image: url('patients.jpg');
+ background-image: url("patients.jpg");
 }
 
 
@@ -95,7 +95,9 @@ button:hover,#btn-signup:hover {
   opacity: 0.8;
 }
 
-
+p{
+color: black;
+}
 
 /* Center the image and position the close button */
 .imgcontainer {
@@ -122,7 +124,9 @@ h2,p,label{
     text-align:center;
 }
 
-
+.o{
+background-image: url('static/images/med1.jpg');
+}
 
 /* Change styles for span and cancel button on extra small screens */
 @media screen and (max-width: 300px) {
@@ -134,40 +138,54 @@ h2,p,label{
 }
 </style>
 <body>
+<section>
+<div>
+
+
+
+<video width="320" height="240" autoplay>
+  <source src="medical.mp4" type="video/mp4">
+
+
+</video>
 <div class="jumbotron text-center">
   <h1>CLINIC_MANAGEMENT_SYSTEM</h1>
   <p>WITH THE GREAT HOSPITALITY</p>
 </div>
 
-<div class="container" >
-  <div class="row">
-    <div class="col-sm-4">
+<div class="container">
 
-      <h3>PATIENTS</h3>
+  <div class="jumbotron text-center">
+    <div class="row-sm-4">
+    <form action="/new/patients" class="o">
+
+         <h1 style="color:black;">Patients</h1>
       <p>We Trust our Hospitality with patients courage and confidence!</p>
       <p>Here,patients can be registered </p>
-         <div>
-    <form action="/new/patients">
-<h1>Add_patients</h1>
-
-        <button type="submit">Add_patients</button>
+        <button type="submit">Patients</button>
     </form>
-</div>
     </div>
-    <div class="col-sm-4">
-      <h3>DOCTORS</h3>
-      <p>EXPERIENCED DOCTORS PRESCRIPTIONS</p>
-      <p>CHECK TO ADD THEIR ENTRY FOR PATIENTS</p>
+    <div class="row-sm-4">
+         <form action="/new/Doctor">
+<h1 style="color:black;">Doctors</h1>
+      <p >Experienced Doctors Prescriptions</p>
+      <p>Check To Add their Entry For Patients</p>
+        <button type="submit">Doctors</button>
+    </form>
     </div>
-    <div class="col-sm-4">
-      <h3>APPOINTMENTS</h3>
-      <p style="left-align">BOOK YOUR APPOINMENT</p>
-      <p>GREAT EXPERIENCED</p>
+    <div class="row-sm-4">
+     <form action="/new/medicines">
+ <h1 style="color:black;">Medicines</h1>
+      <p style="left-align">Medicines Record</p>
+          <p>Medicines is a science of uncertainty and a Art of Probability</p>
+      <p>Check To Add their Entry For Prescriptions</p>
+        <button type="submit">Medicines</button>
+    </form>
     </div>
   </div>
 </div>
 
-<div>
+<div class="jumbotron text-center">
     <form action="/logout">
 <h1>Login Successfully</h1>
         <label>Welcome to your Profile</label>
@@ -176,7 +194,9 @@ h2,p,label{
     </form>
 
 </div>
-
-
+<div style=""></div>
+</div>
+</div>
+</section>
 </body>
 </html>
